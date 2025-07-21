@@ -1,0 +1,19 @@
+# Node.js
+node_modules/
+.env
+package-lock.json
+
+# Editor
+.vscode/
+.idea/
+
+# Logs
+logs
+*.log
+
+# Sistema operativo
+.DS_Store
+
+# Build (si llegaras a generar uno)
+dist/
+build/
