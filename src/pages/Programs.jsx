@@ -21,10 +21,11 @@ function Programs() {
   useEffect(() => {
     const fetchPrograms = async () => {
       try {
-        const { data } = await axiosClient.get("/products");
+        const { data } = await axiosClient.get("/products/readall");
+        console.log("📦 Programas recibidos:", data); // 👈 LOG de depuración
         setPrograms(data);
       } catch (error) {
-        console.error("Error al cargar programas:", error);
+        console.error("❌ Error al cargar programas:", error);
       } finally {
         setLoading(false);
       }

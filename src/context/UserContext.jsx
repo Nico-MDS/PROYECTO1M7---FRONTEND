@@ -1,15 +1,12 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 
-// Crear el contexto
 export const UserContext = createContext();
 
-// Componente proveedor
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // datos del usuario
+  const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
 
-  // Configurar token en headers de Axios
   useEffect(() => {
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -18,7 +15,6 @@ export const UserProvider = ({ children }) => {
     }
   }, [token]);
 
-  // Recuperar usuario si hay token pero no usuario
   useEffect(() => {
     const fetchUser = async () => {
       if (token && !user) {
@@ -26,7 +22,7 @@ export const UserProvider = ({ children }) => {
           const res = await axios.get("http://localhost:5000/api/user/profile");
           setUser(res.data);
         } catch (err) {
-          console.error("Error al recuperar usuario:", err);
+          console.error("❌ Error al recuperar usuario:", err);
           logout();
         }
       }
@@ -35,7 +31,6 @@ export const UserProvider = ({ children }) => {
     fetchUser();
   }, [token]);
 
-  // Login
   const login = async (email, password) => {
     const res = await axios.post("http://localhost:5000/api/user/login", {
       email,
@@ -47,20 +42,20 @@ export const UserProvider = ({ children }) => {
     localStorage.setItem("token", token);
   };
 
-  // Registro
   const signup = async (name, email, password) => {
+    console.log("📦 Enviando registro con:", { name, email, password });
     const res = await axios.post("http://localhost:5000/api/user/register", {
       name,
       email,
       password,
     });
+    console.log("✅ Usuario creado:", res.data);
     const { token, user } = res.data;
     setToken(token);
     setUser(user);
     localStorage.setItem("token", token);
   };
 
-  // Logout
   const logout = () => {
     setToken("");
     setUser(null);
